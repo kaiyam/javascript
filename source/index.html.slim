@@ -1,0 +1,120 @@
+h2
+  | javascript
+section.stopwatch style="margin: 20px; padding: 10px; border: solid 1px #ccc; width: 200px;"
+  h2
+    | stopwatch
+  h1#count
+    | 0.00
+  button.btn_start
+    | start
+  button.btn_stop
+    | stop
+  button data-status="reset"
+    | reset
+
+section.cookingtimer style="margin: 20px; padding: 10px; border: solid 1px #ccc; width: 200px;"
+  h2
+    | cookingtimer
+  h2.counter
+    | 00
+  input type="number" style="width: 50px;" class="input_num"
+  span
+    |秒
+  div
+    button.kitchen_start
+      | start
+    button.kitchen_reset
+      |reset
+
+javascript:
+  var start_time;
+  var now;
+  var count_sec;
+  var run_timer;
+
+  start();
+  stop();
+  reset();
+
+  function start(){
+    $('.btn_start').click( function() {
+       console.log('start');
+       start_time = (new Date()).getTime();
+       run();
+
+    });
+  };
+
+  function run(){
+      now = (new Date()).getTime();
+      count_sec = ((now - start_time)/1000).toFixed(2);
+      $('#count').html(count_sec);
+
+      run_timer = setTimeout(function(){
+          run();
+      },100 );
+  };
+
+  function stop(){
+    $('.btn_stop').click( function(){
+        console.log('stop')
+        clearTimeout(run_timer)
+    } );
+  };
+
+  function reset(){
+    $('[data-status="reset"]').click( function(){
+      console.log('reset')
+      clearTimeout(run_timer)
+      $('#count').html('0.00')
+    });
+  };
+
+  var count;
+  var kitchentimerID;
+  kitchen_start();
+  kitchen_reset();
+
+  function kitchen_start(){
+    $('.kitchen_start').click( function(){
+      time = $('.input_num').val()
+      if ( time > 0 ){
+        $('.input_num').attr("disabled", "disabled");
+        $('.kitchen_start').attr("disabled", "disabled");
+        $('.counter').html(time)
+
+        start_kitchen_timer(time);
+      } else{
+        $('.input_num').val("")
+        return
+      }
+    });
+  }
+  function start_kitchen_timer(time){
+    count = time
+    kitchentimerID = setInterval('countdown()',1000);
+  }
+
+  function countdown(){
+    count--;
+    $('.counter').html(count)
+    if (count <= 0) {
+      count_stop();
+    }
+  }
+
+  function count_stop(){
+    console.log('stop timer')
+    clearInterval(kitchentimerID)
+    $('.input_num').val("");
+    $('.input_num').removeAttr("disabled");
+    $('.kitchen_start').removeAttr("disabled");
+  }
+
+  function kitchen_reset(){
+    $('.kitchen_reset').click( function(){
+      console.log('reset timer');
+      count_stop()
+      $('.counter').html('00')
+    });
+  }
