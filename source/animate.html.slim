@@ -1,0 +1,38 @@
+h3
+  | animate
+
+<div class='btn'>
+</div>
+<div id="box">
+  | hello
+</div>
+sass:
+  .btn
+    background-color: red
+    width: 200px
+    height: 100px
+  #box
+    //float: left
+    background-color: yellow
+    position: absolute
+
+coffee:
+  $('.btn').on 'click',()->
+    console.log("click")
+    $('#box').animate({
+      #'marginLeft': '500px'
+      'left': '500px',
+      'top': '300px'
+      },  {duration: 3000} ,'easeInOutQuint')
+      .animate({'top':'0px'})
+      .animate({
+        'left'  : '700px'
+        'top'   : '300px'
+        'width' : '500px'
+        'height': '200px'
+        'font-size': '100px'
+        'letter-spacing': '20px'}, 3000 ,()->
+          $(this).fadeOut("slow", ()->
+            $(this).attr("style", "")
+          )
+        )
